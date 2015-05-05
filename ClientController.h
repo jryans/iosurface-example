@@ -53,7 +53,7 @@ Copyright (C) 2014 Apple Inc. All Rights Reserved.
 #import <OpenGL/gl.h>
 #import <IOSurface/IOSurface.h>
 
-#define NUM_IOSURFACE_BUFFERS 2
+#define NUM_IOSURFACE_BUFFERS 1
 
 @interface ClientController : NSObject <NSMachPortDelegate>
 

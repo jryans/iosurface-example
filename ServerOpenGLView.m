@@ -165,8 +165,11 @@ programInfo_t program[NUM_PROGRAMS] = {
 	
 	glBindTexture(GL_TEXTURE_RECTANGLE, name);
     // At the moment, CGLTexImageIOSurface2D requires the GL_TEXTURE_RECTANGLE target
-	CGLTexImageIOSurface2D(cgl_ctx, GL_TEXTURE_RECTANGLE, GL_RGBA, 512, 512, GL_BGRA, GL_UNSIGNED_INT_8_8_8_8_REV,
-					ioSurfaceBuffer, 0);
+//	CGLTexImageIOSurface2D(cgl_ctx, GL_TEXTURE_RECTANGLE, GL_RGBA, 512, 512, GL_BGRA, GL_UNSIGNED_INT_8_8_8_8_REV,
+//					ioSurfaceBuffer, 0);
+    
+    glTexImage2D(GL_TEXTURE_RECTANGLE, 0, GL_RGBA, 512, 512, 0, GL_BGRA, GL_UNSIGNED_INT_8_8_8_8_REV, 0);
+    
 	glTexParameteri(GL_TEXTURE_RECTANGLE, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_RECTANGLE, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_RECTANGLE, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);

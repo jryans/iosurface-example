@@ -65,19 +65,29 @@ Copyright (C) 2014 Apple Inc. All Rights Reserved.
 
 // shader info
 enum {
-    PROGRAM_TEXTURE_RECT,
+//    PROGRAM_TEXTURE_RECT,
+    PROGRAM_GECKO,
     NUM_PROGRAMS
 };
 
 enum {
     UNIFORM_MVP,
+    UNIFORM_TEX,
+    UNIFORM_MATRIX_PROJ,
+    UNIFORM_LAYER_RECTS,
+    UNIFORM_LAYER_TRANSFORM,
+    UNIFORM_RENDER_TARGET_OFFSET,
+    UNIFORM_TEXTURE_TRANSFORM,
+    UNIFORM_TEXTURE_RECTS,
+    UNIFORM_TEX_COORD_MULTIPLIER,
     UNIFORM_TEXTURE,
     NUM_UNIFORMS
 };
 
 enum {
-    ATTRIB_VERTEX,
-    ATTRIB_TEXCOORD,
+//    ATTRIB_VERTEX,
+//    ATTRIB_TEXCOORD,
+    ATTRIB_COORD,
     NUM_ATTRIBS
 };
 
@@ -88,9 +98,12 @@ typedef struct {
 } programInfo_t;
 
 programInfo_t program[NUM_PROGRAMS] = {
-    { "texture.vsh",    "textureRect.fsh"   },  // PROGRAM_TEXTURE_RECT
+//    { "texture.vsh",    "textureRect.fsh"   },  // PROGRAM_TEXTURE_RECT
+    { "gecko.vsh",      "gecko.fsh"         },  // PROGRAM_GECKO
 };
 
+#define WIDTH 512
+#define HEIGHT 512
 
 @interface ClientOpenGLView()
 {
@@ -110,13 +123,13 @@ programInfo_t program[NUM_PROGRAMS] = {
 		NSOpenGLPFAAllowOfflineRenderers,
 		NSOpenGLPFAAccelerated,
 		NSOpenGLPFADoubleBuffer,
-		NSOpenGLPFAColorSize, 32,
+		/* NSOpenGLPFAColorSize, 32,
 		NSOpenGLPFADepthSize, 24,
 		NSOpenGLPFAMultisample, 1,
 		NSOpenGLPFASampleBuffers, 1,
 		NSOpenGLPFASamples, 4,
 		NSOpenGLPFANoRecovery,
-        NSOpenGLPFAOpenGLProfile, NSOpenGLProfileVersion3_2Core, // Core Profile is the future
+        NSOpenGLPFAOpenGLProfile, NSOpenGLProfileVersion3_2Core, // Core Profile is the future */
 		0
 	};
 	
@@ -152,6 +165,10 @@ programInfo_t program[NUM_PROGRAMS] = {
 - (void)prepareOpenGL
 {
     [super prepareOpenGL];
+    
+    glBlendFuncSeparate(GL_ONE, GL_ONE_MINUS_SRC_ALPHA,
+                        GL_ONE, GL_ONE);
+    glEnable(GL_BLEND);
     
     glGenVertexArrays(1, &quadVAOId);
     glGenBuffers(1, &quadVBOId);
@@ -200,7 +217,7 @@ programInfo_t program[NUM_PROGRAMS] = {
 	
 	glBindTexture(GL_TEXTURE_RECTANGLE, name);
     // At the moment, CGLTexImageIOSurface2D requires the GL_TEXTURE_RECTANGLE target
-	CGLTexImageIOSurface2D(cgl_ctx, GL_TEXTURE_RECTANGLE, GL_RGBA, 512, 512, GL_BGRA, GL_UNSIGNED_INT_8_8_8_8_REV,
+	CGLTexImageIOSurface2D(cgl_ctx, GL_TEXTURE_RECTANGLE, GL_RGBA, WIDTH, HEIGHT, GL_BGRA, GL_UNSIGNED_INT_8_8_8_8_REV,
 					ioSurfaceBuffer, 0);
 	glTexParameteri(GL_TEXTURE_RECTANGLE, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_RECTANGLE, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -218,52 +235,110 @@ programInfo_t program[NUM_PROGRAMS] = {
 // Render a quad with the the IOSurface backed texture
 - (void)renderTextureFromIOSurfaceWithWidth:(GLsizei)logoWidth height:(GLsizei)logoHeight
 {
-    GLfloat quad[] = {
-        //x, y            s, t
-        -1.0f, -1.0f,     0.0f, 0.0f,
-         1.0f, -1.0f,     logoWidth, 0.0f,
-        -1.0f,  1.0f,     0.0f, logoHeight,
-         1.0f,  1.0f,     logoWidth, logoHeight
+    GLfloat vertices[] = {
+        0.0f, 0.0f, 0.0f, 0.0f,
+        1.0f, 0.0f, 0.0f, 0.0f,
+        0.0f, 1.0f, 0.0f, 0.0f,
+        1.0f, 0.0f, 0.0f, 0.0f,
+        0.0f, 1.0f, 0.0f, 0.0f,
+        1.0f, 1.0f, 0.0f, 0.0f,
+        
+        0.0f, 0.0f, 0.0f, 1.0f,
+        1.0f, 0.0f, 0.0f, 1.0f,
+        0.0f, 1.0f, 0.0f, 1.0f,
+        1.0f, 0.0f, 0.0f, 1.0f,
+        0.0f, 1.0f, 0.0f, 1.0f,
+        1.0f, 1.0f, 0.0f, 1.0f,
+        
+        0.0f, 0.0f, 0.0f, 2.0f,
+        1.0f, 0.0f, 0.0f, 2.0f,
+        0.0f, 1.0f, 0.0f, 2.0f,
+        1.0f, 0.0f, 0.0f, 2.0f,
+        0.0f, 1.0f, 0.0f, 2.0f,
+        1.0f, 1.0f, 0.0f, 2.0f,
+        
+        0.0f, 0.0f, 0.0f, 3.0f,
+        1.0f, 0.0f, 0.0f, 3.0f,
+        0.0f, 1.0f, 0.0f, 3.0f,
+        1.0f, 0.0f, 0.0f, 3.0f,
+        0.0f, 1.0f, 0.0f, 3.0f,
+        1.0f, 1.0f, 0.0f, 3.0f,
     };
     
     if (!quadInit) {
         glBindVertexArray(quadVAOId);
         glBindBuffer(GL_ARRAY_BUFFER, quadVBOId);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(quad), quad, GL_STATIC_DRAW);
-        // positions
-        glVertexAttribPointer(ATTRIB_VERTEX, 2, GL_FLOAT, GL_FALSE, 4*sizeof(GLfloat), NULL);
-        // texture coordinates
-        glVertexAttribPointer(ATTRIB_TEXCOORD, 2, GL_FLOAT, GL_FALSE, 4*sizeof(GLfloat), (const GLvoid*)(2*sizeof(GLfloat)));
-        
+        glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
         quadInit = YES;
     }
     
-    glUseProgram(program[PROGRAM_TEXTURE_RECT].id);
-    
-    // projection matrix
-    GLfloat aspectRatio = self.bounds.size.width / self.bounds.size.height;
-    GLKMatrix4 projection = GLKMatrix4MakeFrustum(-aspectRatio, aspectRatio, -1, 1, 2, 100);
-    // modelView matrix
-    GLKMatrix4 modelView = GLKMatrix4MakeTranslation(0, 0, -9.0);
-    modelView = GLKMatrix4Scale(modelView, 2.5, 2.5, 2.5);
-    modelView = GLKMatrix4Rotate(modelView, 30.0 * M_PI / 180.0, 0.0, 1.0, 0.0);
-    
-    GLKMatrix4 mvp = GLKMatrix4Multiply(projection, modelView);
-    glUniformMatrix4fv(program[PROGRAM_TEXTURE_RECT].uniform[UNIFORM_MVP], 1, GL_FALSE, mvp.m);
-    
-    glUniform1i(program[PROGRAM_TEXTURE_RECT].uniform[UNIFORM_TEXTURE], 0);
+    glUseProgram(program[PROGRAM_GECKO].id);
     
     glBindTexture(GL_TEXTURE_RECTANGLE, [(ClientController *)[NSApp delegate] currentTextureName]);
     glEnable(GL_TEXTURE_RECTANGLE);
     
     glBindVertexArray(quadVAOId);
-    glEnableVertexAttribArray(ATTRIB_VERTEX);
-    glEnableVertexAttribArray(ATTRIB_TEXCOORD);
+    glVertexAttribPointer(ATTRIB_COORD, 4, GL_FLOAT, GL_FALSE, 0, (GLvoid*) 0);
+    glEnableVertexAttribArray(ATTRIB_COORD);
     
-    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+    float layerRects[16] = {
+        0, 0, WIDTH, HEIGHT,
+        0, 0, 0, 0,
+        0, 0, 0, 0,
+        0, 0, 0, 0,
+    };
+    glUniform4fv(program[PROGRAM_GECKO].uniform[UNIFORM_LAYER_RECTS], 4, layerRects);
+
+    float textureRects[16] = {
+        0, 0, 1, 1,
+        0, 0, 0, 0,
+        0, 0, 0, 0,
+        0, 0, 0, 0,
+    };
+    glUniform4fv(program[PROGRAM_GECKO].uniform[UNIFORM_TEXTURE_RECTS], 4, textureRects);
     
-    glDisableVertexAttribArray(ATTRIB_VERTEX);
-    glDisableVertexAttribArray(ATTRIB_TEXCOORD);
+    float renderOffset[4] = {
+        0, 0, 0, 0,
+    };
+    glUniform4fv(program[PROGRAM_GECKO].uniform[UNIFORM_RENDER_TARGET_OFFSET], 1, renderOffset);
+    
+    float textureTransformVals[16] = {
+        1,  0, 0, 0,
+        0, -1, 0, 0,
+        0,  0, 1, 0,
+        0,  1, 0, 1,
+    };
+    GLKMatrix4 textureTransform = GLKMatrix4MakeWithArray(textureTransformVals);
+    glUniformMatrix4fv(program[PROGRAM_GECKO].uniform[UNIFORM_TEXTURE_TRANSFORM], 1, GL_FALSE, textureTransform.m);
+    
+    float layerTransformVals[16] = {
+        1, 0, 0, 0,
+        0, 1, 0, 0,
+        0, 0, 1, 0,
+        0, 0, 0, 1,
+    };
+    GLKMatrix4 layerTransform = GLKMatrix4MakeWithArray(layerTransformVals);
+    glUniformMatrix4fv(program[PROGRAM_GECKO].uniform[UNIFORM_LAYER_TRANSFORM], 1, GL_FALSE, layerTransform.m);
+    
+    float texCoordMultiplier[2] = {
+        WIDTH, HEIGHT,
+    };
+    glUniform2fv(program[PROGRAM_GECKO].uniform[UNIFORM_TEX_COORD_MULTIPLIER], 1, texCoordMultiplier);
+    
+    float projectionVals[16] = {
+        0.00390625,  0, 0, 0,
+        0, -0.00390625, 0, 0,
+        0,           0, 0, 0,
+       -1,           1, 0, 1,
+    };
+    GLKMatrix4 projection = GLKMatrix4MakeWithArray(projectionVals);
+    glUniformMatrix4fv(program[PROGRAM_GECKO].uniform[UNIFORM_MATRIX_PROJ], 1, GL_FALSE, projection.m);
+    
+    glUniform1i(program[PROGRAM_GECKO].uniform[UNIFORM_TEXTURE], 0);
+    
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+    
+    glDisableVertexAttribArray(ATTRIB_COORD);
     glDisable(GL_TEXTURE_RECTANGLE);
 }
 
@@ -271,11 +346,13 @@ programInfo_t program[NUM_PROGRAMS] = {
 {
     glViewport(0, 0, (GLint)self.bounds.size.width, (GLint)self.bounds.size.height);
     
-    glClearColor(0.5f, 0.8f, 1.0f, 1.0f);
+//    fprintf(stderr, "Viewport: %u x %u\n", (uint32)self.bounds.size.width, (uint32)self.bounds.size.height);
+    
+    glClearColor(1.0f, 0.8f, 1.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
     
     // Client draws with current IO surface contents as logo texture
-    [self renderTextureFromIOSurfaceWithWidth:512 height:512];
+    [self renderTextureFromIOSurfaceWithWidth:WIDTH height:HEIGHT];
 	
 	[[self openGLContext] flushBuffer];
 }
@@ -290,10 +367,21 @@ programInfo_t program[NUM_PROGRAMS] = {
         GLchar *attribUsed[NUM_ATTRIBS];
         GLint attrib[NUM_ATTRIBS];
         GLchar *attribName[NUM_ATTRIBS] = {
-            "inVertex", "inTexCoord",
+//            "inVertex",
+//            "inTexCoord",
+            "aCoord",
         };
         const GLchar *uniformName[NUM_UNIFORMS] = {
-            "MVP", "tex",
+            "MVP",
+            "tex",
+            "uMatrixProj",
+            "uLayerRects",
+            "uLayerTransform",
+            "uRenderTargetOffset",
+            "uTextureTransform",
+            "uTextureRects",
+            "uTexCoordMultiplier",
+            "uTexture",
         };
         
         // auto-assign known attribs

@@ -56,6 +56,8 @@
 		AFF7EB1319A67D6E006767EF /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AFF7EB1119A67D39006767EF /* GLKit.framework */; };
 		AFF7EB1519A67DB2006767EF /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AFF7EB1419A67DB2006767EF /* Foundation.framework */; };
 		AFF7EB1619A67DBB006767EF /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AFF7EB1419A67DB2006767EF /* Foundation.framework */; };
+		BFFFF7B51AF9238E0022A0C6 /* gecko.vsh in Resources */ = {isa = PBXBuildFile; fileRef = BFFFF7B31AF91E580022A0C6 /* gecko.vsh */; };
+		BFFFF7B61AF9238E0022A0C6 /* gecko.fsh in Resources */ = {isa = PBXBuildFile; fileRef = BFFFF7B41AF91E840022A0C6 /* gecko.fsh */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -112,6 +114,8 @@
 		AFF7EB0919A678AE006767EF /* BoingRenderer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BoingRenderer.m; sourceTree = "<group>"; };
 		AFF7EB1119A67D39006767EF /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
 		AFF7EB1419A67DB2006767EF /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		BFFFF7B31AF91E580022A0C6 /* gecko.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = gecko.vsh; path = Shaders/gecko.vsh; sourceTree = "<group>"; };
+		BFFFF7B41AF91E840022A0C6 /* gecko.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = gecko.fsh; path = Shaders/gecko.fsh; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -241,6 +245,8 @@
 				AFBA475319A693330075254B /* color.fsh */,
 				AFBA475419A693330075254B /* color.vsh */,
 				AFBA475519A693330075254B /* lighting.vsh */,
+				BFFFF7B31AF91E580022A0C6 /* gecko.vsh */,
+				BFFFF7B41AF91E840022A0C6 /* gecko.fsh */,
 			);
 			name = Shaders;
 			sourceTree = "<group>";
@@ -330,6 +336,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BFFFF7B51AF9238E0022A0C6 /* gecko.vsh in Resources */,
+				BFFFF7B61AF9238E0022A0C6 /* gecko.fsh in Resources */,
 				AF7DA64A19AFD3C30012507E /* textureRect.fsh in Resources */,
 				AF7DA64B19AFD3C30012507E /* texture.vsh in Resources */,
 				4F0934B611BEC6EB00897344 /* InfoPlist.strings in Resources */,

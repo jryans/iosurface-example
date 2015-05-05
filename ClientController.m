@@ -60,6 +60,7 @@ Copyright (C) 2014 Apple Inc. All Rights Reserved.
 	IBOutlet ClientOpenGLView *_view;
 	IBOutlet NSPopUpButton *_rendererPopup;
 	
+    NSTimer *_timer;
 	NSMachPort *serverPort;
 	NSMachPort *localPort;
 	
@@ -85,33 +86,19 @@ Copyright (C) 2014 Apple Inc. All Rights Reserved.
 	
 	[_rendererPopup removeAllItems];
 	[_rendererPopup addItemsWithTitles:[_view rendererNames]];
-	
-	// Slide slave window over a bit.
-	NSRect windowFrame = [_window frame];
-	windowFrame.origin.x += windowFrame.size.width + 32.0f;
-	[_window setFrameOrigin:windowFrame.origin];		
+}
 
-	// Try to check in with master.
-	serverPort = [(NSMachPort *)([[NSMachBootstrapServer sharedInstance] portForName:@"com.apple.MultiGPUServer"]) retain];
-	if(serverPort)
-	{
-		// Create our own local port.
-		localPort = [[NSMachPort alloc] init];
-		
-		// Retrieve raw mach port names.
-		serverPortName = [serverPort machPort];
-		localPortName  = [localPort machPort];
-		
-		// Register our local port with the current runloop.
-		[localPort setDelegate:self];
-		[localPort scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSRunLoopCommonModes];
-		 
-		// Check in with server.
-		int kr;
-		kr = _MGCCheckinClient(serverPortName, localPortName, &clientIndex);
-		if(kr != 0)
-			[NSApp terminate:nil];
-	}
+- (void)applicationDidFinishLaunching:(NSNotification *)note
+{
+    // Fire up animation timer.
+    _timer = [[NSTimer timerWithTimeInterval:1.0f/60.0f target:self selector:@selector(animate:) userInfo:nil repeats:YES] retain];
+    [[NSRunLoop currentRunLoop] addTimer:_timer forMode:NSRunLoopCommonModes];
+}
+
+
+- (void)animate:(NSTimer *)timer
+{
+    [(ClientController *)[NSApp delegate] displayFrame:0 surfaceid:0x6];
 }
 
 - (void)portDied:(NSNotification *)notification
@@ -141,12 +128,22 @@ Copyright (C) 2014 Apple Inc. All Rights Reserved.
 
 - (kern_return_t)displayFrame:(int32_t)frameIndex surfaceid:(uint32_t)iosurface_id
 {
-	nextFrameIndex = frameIndex;
 	
+    nextFrameIndex = frameIndex;
+
 	if(!_ioSurfaceBuffers[frameIndex])
 	{
+        fprintf(stderr, "IOSurface: 0x%x\n", iosurface_id);
 		_ioSurfaceBuffers[frameIndex] = IOSurfaceLookup(iosurface_id);
+        IOSurfaceRef surface = _ioSurfaceBuffers[frameIndex];
+        IOSurfaceIncrementUseCount(surface);
+        fprintf(stderr, "Use: %u, Count: %u, Size: %u x %u, Format: %u\n",
+                IOSurfaceIsInUse(surface),
+                IOSurfaceGetUseCount(surface),
+                IOSurfaceGetWidth(surface), IOSurfaceGetHeight(surface),
+                IOSurfaceGetPixelFormat(surface));
 	}
+
 	if(!_textureNames[frameIndex])
 		_textureNames[frameIndex] = [_view setupIOSurfaceTexture:_ioSurfaceBuffers[frameIndex]];
 	
