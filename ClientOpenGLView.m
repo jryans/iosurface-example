@@ -339,11 +339,8 @@ programInfo_t program[NUM_PROGRAMS] = {
 - (void)drawRect:(NSRect)theRect
 {
     glViewport(0, 0, (GLint)self.bounds.size.width, (GLint)self.bounds.size.height);
-    
+
 //    fprintf(stderr, "Viewport: %u x %u\n", (uint32)self.bounds.size.width, (uint32)self.bounds.size.height);
-    
-    glClearColor(1.0f, 0.8f, 1.0f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
     
     // Client draws with current IO surface contents as logo texture
     [self renderTextureFromIOSurfaceWithWidth:WIDTH height:HEIGHT];
