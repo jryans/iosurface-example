@@ -65,14 +65,11 @@ Copyright (C) 2014 Apple Inc. All Rights Reserved.
 
 // shader info
 enum {
-//    PROGRAM_TEXTURE_RECT,
     PROGRAM_GECKO,
     NUM_PROGRAMS
 };
 
 enum {
-    UNIFORM_MVP,
-    UNIFORM_TEX,
     UNIFORM_MATRIX_PROJ,
     UNIFORM_LAYER_RECTS,
     UNIFORM_LAYER_TRANSFORM,
@@ -85,8 +82,6 @@ enum {
 };
 
 enum {
-//    ATTRIB_VERTEX,
-//    ATTRIB_TEXCOORD,
     ATTRIB_COORD,
     NUM_ATTRIBS
 };
@@ -98,7 +93,6 @@ typedef struct {
 } programInfo_t;
 
 programInfo_t program[NUM_PROGRAMS] = {
-//    { "texture.vsh",    "textureRect.fsh"   },  // PROGRAM_TEXTURE_RECT
     { "gecko.vsh",      "gecko.fsh"         },  // PROGRAM_GECKO
 };
 
@@ -367,13 +361,9 @@ programInfo_t program[NUM_PROGRAMS] = {
         GLchar *attribUsed[NUM_ATTRIBS];
         GLint attrib[NUM_ATTRIBS];
         GLchar *attribName[NUM_ATTRIBS] = {
-//            "inVertex",
-//            "inTexCoord",
             "aCoord",
         };
         const GLchar *uniformName[NUM_UNIFORMS] = {
-            "MVP",
-            "tex",
             "uMatrixProj",
             "uLayerRects",
             "uLayerTransform",
