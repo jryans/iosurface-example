@@ -72,6 +72,7 @@ Copyright (C) 2014 Apple Inc. All Rights Reserved.
 	
 	IOSurfaceRef _ioSurfaceBuffers[NUM_IOSURFACE_BUFFERS];
 	GLuint _textureNames[NUM_IOSURFACE_BUFFERS];
+    uint32_t _lastSeed[NUM_IOSURFACE_BUFFERS];
     
 	uint32_t rendererIndex;
 }
@@ -144,8 +145,16 @@ Copyright (C) 2014 Apple Inc. All Rights Reserved.
                 IOSurfaceGetPixelFormat(surface));
 	}
 
+    IOSurfaceRef surface = _ioSurfaceBuffers[frameIndex];
+    uint32_t seed = IOSurfaceGetSeed(surface);
+    if (_lastSeed[frameIndex] == seed) {
+        // Surface is unchanged, nothing to do
+        return 0;
+    }
+    _lastSeed[frameIndex] = seed;
+
 	if(!_textureNames[frameIndex])
-		_textureNames[frameIndex] = [_view setupIOSurfaceTexture:_ioSurfaceBuffers[frameIndex]];
+		_textureNames[frameIndex] = [_view setupIOSurfaceTexture:surface];
 	
 	[_view setNeedsDisplay:YES];
 	[_view display];
