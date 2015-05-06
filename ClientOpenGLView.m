@@ -117,35 +117,13 @@ programInfo_t program[NUM_PROGRAMS] = {
 		NSOpenGLPFAAllowOfflineRenderers,
 		NSOpenGLPFAAccelerated,
 		NSOpenGLPFADoubleBuffer,
-		/* NSOpenGLPFAColorSize, 32,
-		NSOpenGLPFADepthSize, 24,
-		NSOpenGLPFAMultisample, 1,
-		NSOpenGLPFASampleBuffers, 1,
-		NSOpenGLPFASamples, 4,
-		NSOpenGLPFANoRecovery,
-        NSOpenGLPFAOpenGLProfile, NSOpenGLProfileVersion3_2Core, // Core Profile is the future */
 		0
 	};
 	
 	pix_fmt = [[NSOpenGLPixelFormat alloc] initWithAttributes:attribs];
 	if(!pix_fmt)
 	{
-		// Try again without multisample
-		NSOpenGLPixelFormatAttribute attribs_no_multisample[] =
-		{
-			NSOpenGLPFAAllowOfflineRenderers,
-			NSOpenGLPFAAccelerated,
-			NSOpenGLPFADoubleBuffer,
-			NSOpenGLPFAColorSize, 32,
-			NSOpenGLPFADepthSize, 24,
-			NSOpenGLPFANoRecovery,
-            NSOpenGLPFAOpenGLProfile, NSOpenGLProfileVersion3_2Core, // Core Profile is the future
-			0
-		};
-
-		pix_fmt = [[NSOpenGLPixelFormat alloc] initWithAttributes:attribs_no_multisample];
-		if(!pix_fmt)
-			[NSApp terminate:nil];
+        [NSApp terminate:nil];
 	}
 	
 	self = [super initWithFrame:frame pixelFormat:pix_fmt];
