@@ -56,6 +56,25 @@
 		AFF7EB1319A67D6E006767EF /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AFF7EB1119A67D39006767EF /* GLKit.framework */; };
 		AFF7EB1519A67DB2006767EF /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AFF7EB1419A67DB2006767EF /* Foundation.framework */; };
 		AFF7EB1619A67DBB006767EF /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AFF7EB1419A67DB2006767EF /* Foundation.framework */; };
+		BF48664A1AFB103E004BC0CD /* pattern.vsh in Resources */ = {isa = PBXBuildFile; fileRef = BF4866481AFB1013004BC0CD /* pattern.vsh */; };
+		BF48664B1AFB103E004BC0CD /* pattern.fsh in Resources */ = {isa = PBXBuildFile; fileRef = BF4866491AFB1020004BC0CD /* pattern.fsh */; };
+		BF48664C1AFB1190004BC0CD /* pattern.vsh in Resources */ = {isa = PBXBuildFile; fileRef = BF4866481AFB1013004BC0CD /* pattern.vsh */; };
+		BF48664D1AFB1190004BC0CD /* pattern.fsh in Resources */ = {isa = PBXBuildFile; fileRef = BF4866491AFB1020004BC0CD /* pattern.fsh */; };
+		BF4866511AFB1A7A004BC0CD /* pattern.vsh in Resources */ = {isa = PBXBuildFile; fileRef = BF4866481AFB1013004BC0CD /* pattern.vsh */; };
+		BF4866521AFB1A7A004BC0CD /* pattern.fsh in Resources */ = {isa = PBXBuildFile; fileRef = BF4866491AFB1020004BC0CD /* pattern.fsh */; };
+		BF4866571AFB1A7A004BC0CD /* ServerMainMenu.nib in Resources */ = {isa = PBXBuildFile; fileRef = 29B97318FDCFA39411CA2CEA /* ServerMainMenu.nib */; };
+		BF4866581AFB1A7A004BC0CD /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
+		BF48665B1AFB1A7A004BC0CD /* shaderUtil.c in Sources */ = {isa = PBXBuildFile; fileRef = AFF7EB0619A6787D006767EF /* shaderUtil.c */; };
+		BF48665C1AFB1A7A004BC0CD /* fileUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = AFF7EB0519A6787D006767EF /* fileUtil.m */; };
+		BF48665E1AFB1A7A004BC0CD /* MultiGPUMig.defs in Sources */ = {isa = PBXBuildFile; fileRef = 4F0A38480DDE41BB0081E0D7 /* MultiGPUMig.defs */; settings = {ATTRIBUTES = (Client, Server, ); }; };
+		BF48665F1AFB1A7A004BC0CD /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
+		BF4866601AFB1A7A004BC0CD /* ServerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F0934EC11BEC7E500897344 /* ServerController.m */; };
+		BF4866631AFB1A7A004BC0CD /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AFF7EB1419A67DB2006767EF /* Foundation.framework */; };
+		BF4866641AFB1A7A004BC0CD /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AFF7EB1119A67D39006767EF /* GLKit.framework */; };
+		BF4866651AFB1A7A004BC0CD /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
+		BF4866661AFB1A7A004BC0CD /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F0A38780DDE436A0081E0D7 /* OpenGL.framework */; };
+		BF4866671AFB1A7A004BC0CD /* IOSurface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FD5FEBF0E36D44F0048611E /* IOSurface.framework */; };
+		BF48666F1AFB1CA8004BC0CD /* PatternOpenGLView.m in Sources */ = {isa = PBXBuildFile; fileRef = BF48666E1AFB1C2B004BC0CD /* PatternOpenGLView.m */; };
 		BFFFF7B51AF9238E0022A0C6 /* gecko.vsh in Resources */ = {isa = PBXBuildFile; fileRef = BFFFF7B31AF91E580022A0C6 /* gecko.vsh */; };
 		BFFFF7B61AF9238E0022A0C6 /* gecko.fsh in Resources */ = {isa = PBXBuildFile; fileRef = BFFFF7B41AF91E840022A0C6 /* gecko.fsh */; };
 /* End PBXBuildFile section */
@@ -114,6 +133,10 @@
 		AFF7EB0919A678AE006767EF /* BoingRenderer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BoingRenderer.m; sourceTree = "<group>"; };
 		AFF7EB1119A67D39006767EF /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
 		AFF7EB1419A67DB2006767EF /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		BF4866481AFB1013004BC0CD /* pattern.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = pattern.vsh; path = Shaders/pattern.vsh; sourceTree = "<group>"; };
+		BF4866491AFB1020004BC0CD /* pattern.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = pattern.fsh; path = Shaders/pattern.fsh; sourceTree = "<group>"; };
+		BF48666B1AFB1A7A004BC0CD /* MultiGPUPattern.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MultiGPUPattern.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		BF48666E1AFB1C2B004BC0CD /* PatternOpenGLView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PatternOpenGLView.m; sourceTree = "<group>"; };
 		BFFFF7B31AF91E580022A0C6 /* gecko.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = gecko.vsh; path = Shaders/gecko.vsh; sourceTree = "<group>"; };
 		BFFFF7B41AF91E840022A0C6 /* gecko.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = gecko.fsh; path = Shaders/gecko.fsh; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -143,6 +166,18 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		BF4866621AFB1A7A004BC0CD /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BF4866631AFB1A7A004BC0CD /* Foundation.framework in Frameworks */,
+				BF4866641AFB1A7A004BC0CD /* GLKit.framework in Frameworks */,
+				BF4866651AFB1A7A004BC0CD /* Cocoa.framework in Frameworks */,
+				BF4866661AFB1A7A004BC0CD /* OpenGL.framework in Frameworks */,
+				BF4866671AFB1A7A004BC0CD /* IOSurface.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -163,6 +198,7 @@
 			children = (
 				8D1107320486CEB800E47090 /* MultiGPUServer.app */,
 				4F0934C911BEC6EB00897344 /* MultiGPUClient.app */,
+				BF48666B1AFB1A7A004BC0CD /* MultiGPUPattern.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -222,6 +258,7 @@
 				AFF7EB0819A678AE006767EF /* BoingRenderer.h */,
 				AFF7EB0919A678AE006767EF /* BoingRenderer.m */,
 				AF88AD9A19A8342F008AD99D /* ServerShaderDefs.h */,
+				BF48666E1AFB1C2B004BC0CD /* PatternOpenGLView.m */,
 			);
 			name = ServerClasses;
 			sourceTree = "<group>";
@@ -247,6 +284,8 @@
 				AFBA475519A693330075254B /* lighting.vsh */,
 				BFFFF7B31AF91E580022A0C6 /* gecko.vsh */,
 				BFFFF7B41AF91E840022A0C6 /* gecko.fsh */,
+				BF4866481AFB1013004BC0CD /* pattern.vsh */,
+				BF4866491AFB1020004BC0CD /* pattern.fsh */,
 			);
 			name = Shaders;
 			sourceTree = "<group>";
@@ -302,6 +341,24 @@
 			productReference = 8D1107320486CEB800E47090 /* MultiGPUServer.app */;
 			productType = "com.apple.product-type.application";
 		};
+		BF48664F1AFB1A7A004BC0CD /* MultiGPUPattern */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = BF4866681AFB1A7A004BC0CD /* Build configuration list for PBXNativeTarget "MultiGPUPattern" */;
+			buildPhases = (
+				BF4866501AFB1A7A004BC0CD /* Resources */,
+				BF48665A1AFB1A7A004BC0CD /* Sources */,
+				BF4866621AFB1A7A004BC0CD /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = MultiGPUPattern;
+			productInstallPath = "$(HOME)/Applications";
+			productName = MultiGPU;
+			productReference = BF48666B1AFB1A7A004BC0CD /* MultiGPUPattern.app */;
+			productType = "com.apple.product-type.application";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -327,6 +384,7 @@
 				4F0934CC11BEC75E00897344 /* MultiGPUApps */,
 				8D1107260486CEB800E47090 /* MultiGPUServer */,
 				4F0934B311BEC6EB00897344 /* MultiGPUClient */,
+				BF48664F1AFB1A7A004BC0CD /* MultiGPUPattern */,
 			);
 		};
 /* End PBXProject section */
@@ -336,6 +394,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BF48664A1AFB103E004BC0CD /* pattern.vsh in Resources */,
+				BF48664B1AFB103E004BC0CD /* pattern.fsh in Resources */,
 				BFFFF7B51AF9238E0022A0C6 /* gecko.vsh in Resources */,
 				BFFFF7B61AF9238E0022A0C6 /* gecko.fsh in Resources */,
 				AF7DA64A19AFD3C30012507E /* textureRect.fsh in Resources */,
@@ -349,6 +409,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BF48664C1AFB1190004BC0CD /* pattern.vsh in Resources */,
+				BF48664D1AFB1190004BC0CD /* pattern.fsh in Resources */,
 				AFBA475619A696D90075254B /* color.fsh in Resources */,
 				AFBA475719A696D90075254B /* color.vsh in Resources */,
 				AFBA475819A696D90075254B /* lighting.vsh in Resources */,
@@ -356,6 +418,17 @@
 				8D11072A0486CEB800E47090 /* ServerMainMenu.nib in Resources */,
 				8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */,
 				AF40202B19A7EBB700C3897E /* texture.vsh in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BF4866501AFB1A7A004BC0CD /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BF4866511AFB1A7A004BC0CD /* pattern.vsh in Resources */,
+				BF4866521AFB1A7A004BC0CD /* pattern.fsh in Resources */,
+				BF4866571AFB1A7A004BC0CD /* ServerMainMenu.nib in Resources */,
+				BF4866581AFB1A7A004BC0CD /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -386,6 +459,19 @@
 				8D11072D0486CEB800E47090 /* main.m in Sources */,
 				4F0934EF11BEC7E500897344 /* ServerController.m in Sources */,
 				4F0934F011BEC7E500897344 /* ServerOpenGLView.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BF48665A1AFB1A7A004BC0CD /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BF48666F1AFB1CA8004BC0CD /* PatternOpenGLView.m in Sources */,
+				BF48665B1AFB1A7A004BC0CD /* shaderUtil.c in Sources */,
+				BF48665C1AFB1A7A004BC0CD /* fileUtil.m in Sources */,
+				BF48665E1AFB1A7A004BC0CD /* MultiGPUMig.defs in Sources */,
+				BF48665F1AFB1A7A004BC0CD /* main.m in Sources */,
+				BF4866601AFB1A7A004BC0CD /* ServerController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -494,6 +580,44 @@
 			};
 			name = Release;
 		};
+		BF4866691AFB1A7A004BC0CD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = MultiGPU_Prefix.pch;
+				INFOPLIST_FILE = ServerInfo.plist;
+				INSTALL_PATH = "$(HOME)/Applications";
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				PRODUCT_NAME = MultiGPUPattern;
+				SDKROOT = macosx;
+				WRAPPER_EXTENSION = app;
+				ZERO_LINK = YES;
+			};
+			name = Debug;
+		};
+		BF48666A1AFB1A7A004BC0CD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_MODEL_TUNING = G5;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = MultiGPU_Prefix.pch;
+				INFOPLIST_FILE = ServerInfo.plist;
+				INSTALL_PATH = "$(HOME)/Applications";
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				OTHER_MIGFLAGS = "-sheader MultiGPUMigServer.h";
+				PRODUCT_NAME = MultiGPUPattern;
+				SDKROOT = macosx;
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
 		C01FCF4B08A954540054247B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -574,6 +698,15 @@
 			buildConfigurations = (
 				4F0934CD11BEC75E00897344 /* Debug */,
 				4F0934CE11BEC75E00897344 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		BF4866681AFB1A7A004BC0CD /* Build configuration list for PBXNativeTarget "MultiGPUPattern" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BF4866691AFB1A7A004BC0CD /* Debug */,
+				BF48666A1AFB1A7A004BC0CD /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
