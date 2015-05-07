@@ -96,9 +96,6 @@ programInfo_t program[NUM_PROGRAMS] = {
     { "gecko.vsh",      "gecko.fsh"         },  // PROGRAM_GECKO
 };
 
-#define WIDTH 512
-#define HEIGHT 512
-
 @interface ClientOpenGLView()
 {
     GLuint quadVAOId, quadVBOId;
@@ -117,6 +114,7 @@ programInfo_t program[NUM_PROGRAMS] = {
 		NSOpenGLPFAAllowOfflineRenderers,
 		NSOpenGLPFAAccelerated,
 		NSOpenGLPFADoubleBuffer,
+//        NSOpenGLPFAOpenGLProfile, NSOpenGLProfileVersion3_2Core,
 		0
 	};
 	
@@ -128,7 +126,9 @@ programInfo_t program[NUM_PROGRAMS] = {
 	
 	self = [super initWithFrame:frame pixelFormat:pix_fmt];
 	[pix_fmt release];
-	
+
+    [self setWantsBestResolutionOpenGLSurface:YES];
+
 	[[self openGLContext] makeCurrentContext];
 
 	return self;
@@ -141,7 +141,7 @@ programInfo_t program[NUM_PROGRAMS] = {
     glBlendFuncSeparate(GL_ONE, GL_ONE_MINUS_SRC_ALPHA,
                         GL_ONE, GL_ONE);
     glEnable(GL_BLEND);
-    
+
     glGenVertexArrays(1, &quadVAOId);
     glGenBuffers(1, &quadVBOId);
     
@@ -182,15 +182,18 @@ programInfo_t program[NUM_PROGRAMS] = {
 // Create an IOSurface backed texture
 - (GLuint)setupIOSurfaceTexture:(IOSurfaceRef)ioSurfaceBuffer
 {
-	GLuint name;
+    NSSize backingSize = [self convertSizeToBacking:[self bounds].size];
+
+    GLuint name;
 	CGLContextObj cgl_ctx = (CGLContextObj)[[self openGLContext] CGLContextObj];
 	
 	glGenTextures(1, &name);
 	
 	glBindTexture(GL_TEXTURE_RECTANGLE, name);
     // At the moment, CGLTexImageIOSurface2D requires the GL_TEXTURE_RECTANGLE target
-	CGLTexImageIOSurface2D(cgl_ctx, GL_TEXTURE_RECTANGLE, GL_RGBA, WIDTH, HEIGHT, GL_BGRA, GL_UNSIGNED_INT_8_8_8_8_REV,
-					ioSurfaceBuffer, 0);
+	CGLTexImageIOSurface2D(cgl_ctx, GL_TEXTURE_RECTANGLE, GL_RGBA,
+                           backingSize.width, backingSize.height, GL_BGRA,
+                           GL_UNSIGNED_INT_8_8_8_8_REV, ioSurfaceBuffer, 0);
 	glTexParameteri(GL_TEXTURE_RECTANGLE, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_RECTANGLE, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_RECTANGLE, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
@@ -205,8 +208,10 @@ programInfo_t program[NUM_PROGRAMS] = {
 }
 
 // Render a quad with the the IOSurface backed texture
-- (void)renderTextureFromIOSurfaceWithWidth:(GLsizei)logoWidth height:(GLsizei)logoHeight
+- (void)renderTextureFromIOSurface
 {
+    NSSize backingSize = [self convertSizeToBacking:[self bounds].size];
+
     GLfloat vertices[] = {
         0.0f, 0.0f, 0.0f, 0.0f,
         1.0f, 0.0f, 0.0f, 0.0f,
@@ -254,7 +259,7 @@ programInfo_t program[NUM_PROGRAMS] = {
     glEnableVertexAttribArray(ATTRIB_COORD);
     
     float layerRects[16] = {
-        0, 0, WIDTH, HEIGHT,
+        0, 0, backingSize.width, backingSize.height,
         0, 0, 0, 0,
         0, 0, 0, 0,
         0, 0, 0, 0,
@@ -293,15 +298,15 @@ programInfo_t program[NUM_PROGRAMS] = {
     glUniformMatrix4fv(program[PROGRAM_GECKO].uniform[UNIFORM_LAYER_TRANSFORM], 1, GL_FALSE, layerTransform.m);
     
     float texCoordMultiplier[2] = {
-        WIDTH, HEIGHT,
+        backingSize.width, backingSize.height,
     };
     glUniform2fv(program[PROGRAM_GECKO].uniform[UNIFORM_TEX_COORD_MULTIPLIER], 1, texCoordMultiplier);
     
     float projectionVals[16] = {
-        0.00390625,  0, 0, 0,
-        0, -0.00390625, 0, 0,
-        0,           0, 0, 0,
-       -1,           1, 0, 1,
+        2 / backingSize.width,   0, 0, 0,
+        0, -2 / backingSize.height, 0, 0,
+        0,                       0, 0, 0,
+       -1,                       1, 0, 1,
     };
     GLKMatrix4 projection = GLKMatrix4MakeWithArray(projectionVals);
     glUniformMatrix4fv(program[PROGRAM_GECKO].uniform[UNIFORM_MATRIX_PROJ], 1, GL_FALSE, projection.m);
@@ -316,12 +321,10 @@ programInfo_t program[NUM_PROGRAMS] = {
 
 - (void)drawRect:(NSRect)theRect
 {
-    glViewport(0, 0, (GLint)self.bounds.size.width, (GLint)self.bounds.size.height);
+    NSSize backingSize = [self convertSizeToBacking:[self bounds].size];
+    glViewport(0, 0, (GLint)backingSize.width, (GLint)backingSize.height);
 
-//    fprintf(stderr, "Viewport: %u x %u\n", (uint32)self.bounds.size.width, (uint32)self.bounds.size.height);
-    
-    // Client draws with current IO surface contents as logo texture
-    [self renderTextureFromIOSurfaceWithWidth:WIDTH height:HEIGHT];
+    [self renderTextureFromIOSurface];
 	
 	[[self openGLContext] flushBuffer];
 }

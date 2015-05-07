@@ -87,6 +87,9 @@ Copyright (C) 2014 Apple Inc. All Rights Reserved.
 	
 	[_rendererPopup removeAllItems];
 	[_rendererPopup addItemsWithTitles:[_view rendererNames]];
+    
+    [_view setRendererIndex:0];
+    [_rendererPopup selectItemAtIndex:0];
 }
 
 - (void)applicationDidFinishLaunching:(NSNotification *)note
@@ -99,7 +102,7 @@ Copyright (C) 2014 Apple Inc. All Rights Reserved.
 
 - (void)animate:(NSTimer *)timer
 {
-    [(ClientController *)[NSApp delegate] displayFrame:0 surfaceid:0x6];
+    [(ClientController *)[NSApp delegate] displayFrame:0 surfaceid:0x9];
 }
 
 - (void)portDied:(NSNotification *)notification
@@ -143,6 +146,22 @@ Copyright (C) 2014 Apple Inc. All Rights Reserved.
                 IOSurfaceGetUseCount(surface),
                 IOSurfaceGetWidth(surface), IOSurfaceGetHeight(surface),
                 IOSurfaceGetPixelFormat(surface));
+
+        CGFloat width = IOSurfaceGetWidth(surface);
+        CGFloat height = IOSurfaceGetHeight(surface);
+//        NSSize textureSize = NSMakeSize(width, height);
+//        [_view setBoundsSize:[_view convertSizeFromBacking:textureSize]];
+
+        NSSize frameSize = [_view frame].size;
+        NSSize boundsSize = [_view bounds].size;
+        NSSize backingSize = [_view convertSizeToBacking:[_view bounds].size];
+        fprintf(stderr, "Frame: %u x %u, Bounds: %u x %u, Backing: %u x %u\n",
+                (uint)frameSize.width, (uint)frameSize.height,
+                (uint)boundsSize.width, (uint)boundsSize.height,
+                (uint)backingSize.width, (uint)backingSize.height);
+
+        const GLubyte* strVersion = glGetString(GL_VERSION);
+        fprintf(stderr, "%s\n", strVersion);
 	}
 
     IOSurfaceRef surface = _ioSurfaceBuffers[frameIndex];
