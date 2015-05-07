@@ -12,11 +12,11 @@ precision highp float;
 #endif
 
 //#define ENABLE_SCROLLING
-const float S = 10.; // Scale
+const float S = 512.; // Scale
 
 void mainImage( out vec4 fragColor, in vec2 fragCoord )
 {
-    vec2 uv = floor(fragCoord.xy
+    vec2 uv = floor(fragCoord.xy / iResolution.xy * S
                     * vec2(iResolution.x / iResolution.y, 1)
 #ifdef ENABLE_SCROLLING
                     + vec2(iGlobalTime, cos(iGlobalTime))

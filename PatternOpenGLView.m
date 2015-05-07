@@ -121,8 +121,8 @@ programInfo_t program[NUM_PROGRAMS] = {
         NSOpenGLPFAAllowOfflineRenderers,
         NSOpenGLPFAAccelerated,
         NSOpenGLPFADoubleBuffer,
-        NSOpenGLPFAColorSize, 32,
-        NSOpenGLPFADepthSize, 24,
+//        NSOpenGLPFAColorSize, 32,
+//        NSOpenGLPFADepthSize, 24,
         //        NSOpenGLPFAOpenGLProfile, NSOpenGLProfileVersion3_2Core, // Core Profile is the future
         0
     };
@@ -136,6 +136,8 @@ programInfo_t program[NUM_PROGRAMS] = {
 
     self = [super initWithFrame:frame pixelFormat:pix_fmt];
     [pix_fmt release];
+
+    [self setWantsBestResolutionOpenGLSurface:YES];
 
     [[self openGLContext] makeCurrentContext];
 
@@ -228,18 +230,6 @@ programInfo_t program[NUM_PROGRAMS] = {
 // Fill the view with the IOSurface backed texture
 - (void)renderTextureFromCurrentIOSurface
 {
-    NSRect bounds = [self bounds];
-    GLfloat width = self.bounds.size.width;
-    GLfloat height = self.bounds.size.height;
-
-    GLfloat quad[] = {
-        //x, y           s, t
-        0.0f, 0.0f,      0.0f, 0.0f,
-        width, 0.0f,     512.0f, 0.0f,
-        0.0f, height,    0.0f, 512.0f,
-        width, height,   512.0f, 512.0f,
-    };
-
     GLfloat vertices[] = {
         -1.0, -1.0,
         1.0, -1.0,
@@ -261,16 +251,13 @@ programInfo_t program[NUM_PROGRAMS] = {
         quadInit = YES;
     }
 
-    glViewport(0, 0, (GLint)bounds.size.width, (GLint)bounds.size.height);
+    NSSize backingSize = [self convertSizeToBacking:[self bounds].size];
+    glViewport(0, 0, (GLint)backingSize.width, (GLint)backingSize.height);
 
     glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 
     glUseProgram(program[PROGRAM_PATTERN].id);
-
-    GLKMatrix4 projection = GLKMatrix4MakeOrtho(0.0, (GLfloat)bounds.size.width, 0.0f, (GLfloat)bounds.size.height, -1.0f, 1.0f);
-    GLKMatrix4 modelView = GLKMatrix4Identity;
-    GLKMatrix4 mvp = GLKMatrix4Multiply(projection, modelView);
 
     glUniform3f(program[PROGRAM_PATTERN].uniform[UNIFORM_RESOLUTION], 512.0f, 512.0f, 1.0f);
 
